@@ -1,3 +1,36 @@
+
+
+/*  Configurações gerais*/
+const CHAVE_CARRINHO = "carrinhoMrLouiz";
+const TAXA_ENTREGA = 8.00;
+const NUMERO_WHATSAPP = "5582996585635"; // DDI + DDD + número
+const CHAVE_PIX = "82996585635";          // troque pela sua chave Pix real
+
+
+/*  2. Funções de apoio (usadas em várias partes do site)*/
+function formatarMoeda(valor) {
+  return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function obterCarrinho() {
+  try {
+    const salvo = localStorage.getItem(CHAVE_CARRINHO);
+    if (salvo) {
+      const dados = JSON.parse(salvo);
+      if (Array.isArray(dados)) return dados;
+    }
+  } catch (erro) {
+    console.warn("Não foi possível ler o carrinho salvo:", erro);
+  }
+  return [];
+}
+
+function salvarCarrinho(carrinho) {
+  localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));
+}
+
+
+/* 3. carrossel de imagens (página inicial / cardápio)*/
 // carrossel de imagens
 let index = 0;
 const slides = document.querySelectorAll('.slides img');
@@ -12,70 +45,100 @@ function mostrarSlide() {
 mostrarSlide(); // mostra a primeira imagem
 setInterval(mostrarSlide, 3000); // troca a cada 3 segundos
 
+/* 4. Rastreamento de arquivos (página rastreamento.html) */
+function iniciarRastreamento() {
+  const statusPedido = document.querySelectorAll("#status-pedido li");
+  if (statusPedido.length === 0) return;
 
-//rastreamento de pedidos
-const status = document.querySelectorAll("#status-pedido li");
-let etapa = 0;
+  let etapaAtual = 0;
 
-function atualizarStatus() {
-  if (etapa < status.length) {
-    status[etapa].style.color = "green";
-    etapa++;
-  }
-}
-
-setInterval(atualizarStatus, 3000); // muda o status a cada 3 segundos
-
-
-//carrinho de compras
-//configurações iniciais
-const TAXA_ENTREGA = 8.00;
-const CHAVE_CARRINHO = "carrinhoMrLouiz";
-
-// Carrinho de exemplo, usado apenas se ainda não houver nada salvo
-// (assim a página nunca fica vazia em uma primeira visita de teste)
-const carrinhoExemploInicial = [
-  { id: "hamburguer", nome: "Hambúrguer Artesanal", preco: 25.00, imagem: "img/hamburguer.jpg", quantidade: 1 },
-  { id: "refri", nome: "Refrigerante Lata", preco: 6.00, imagem: "img/refri.jpg", quantidade: 2 },
-  { id: "batata", nome: "Batata Frita", preco: 15.00, imagem: "img/batata.jpg", quantidade: 1 }
-];
-
-function formatarMoeda(valor) {
-  return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-
-// persistência do carrinho no localStorage
-function obterCarrinho() {
-  try {
-    const salvo = localStorage.getItem(CHAVE_CARRINHO);
-    if (salvo) {
-      const dados = JSON.parse(salvo);
-      if (Array.isArray(dados)) return dados;
+  function atualizarStatus() {
+    if (etapaAtual < statusPedido.length) {
+      statusPedido[etapaAtual].style.color = "green";
+      etapaAtual++;
     }
-  } catch (e) {
-    console.warn("Erro ao ler carrinho salvo:", e);
   }
-  return [];
+
+  setInterval(atualizarStatus, 3000);
 }
 
-function salvarCarrinho(carrinho) {
-  localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(carrinho));
-}
 
-// Garante que sempre haja algo na primeira visita (apenas para fins de demonstração)
-function inicializarCarrinhoSeVazio() {
+/* 5. Contador de itens do menu (todas as páginas com carrinho)*/
+function atualizarContadorCarrinho() {
+  const contadorEl = document.getElementById("contador-carrinho");
+  if (!contadorEl) return;
+
   const carrinho = obterCarrinho();
-  if (carrinho.length === 0 && localStorage.getItem(CHAVE_CARRINHO) === null) {
-    salvarCarrinho(carrinhoExemploInicial);
-  }
+  const totalItens = carrinho.reduce((soma, item) => soma + item.quantidade, 0);
+
+  contadorEl.textContent = totalItens;
+  contadorEl.classList.toggle("contador-vazio", totalItens === 0);
 }
 
-// renderização do carrinho
+
+/* 6. Adicionar itens ao carrinho (cardápio, bebidas, combos)*/
+function adicionarAoCarrinho(item) {
+  const carrinho = obterCarrinho();
+  const itemExistente = carrinho.find(i => i.id === item.id);
+
+  if (itemExistente) {
+    itemExistente.quantidade += 1;
+  } else {
+    carrinho.push({
+      id: item.id,
+      nome: item.nome,
+      preco: item.preco,
+      imagem: item.imagem || "",
+      quantidade: 1
+    });
+  }
+
+  salvarCarrinho(carrinho);
+  atualizarContadorCarrinho();
+}
+
+function mostrarFeedbackBotao(botao) {
+  const textoOriginal = botao.textContent;
+  botao.textContent = "Adicionado! ✓";
+  botao.classList.add("btn-adicionado");
+  botao.disabled = true;
+
+  setTimeout(() => {
+    botao.textContent = textoOriginal;
+    botao.classList.remove("btn-adicionado");
+    botao.disabled = false;
+  }, 1200);
+}
+
+function iniciarBotoesAdicionar() {
+  const botoes = document.querySelectorAll(".btn-adicionar");
+  if (botoes.length === 0) return;
+
+  botoes.forEach(botao => {
+    botao.addEventListener("click", () => {
+      const item = {
+        id: botao.dataset.id,
+        nome: botao.dataset.nome,
+        preco: parseFloat(botao.dataset.preco),
+        imagem: botao.dataset.imagem
+      };
+
+      adicionarAoCarrinho(item);
+      mostrarFeedbackBotao(botao);
+    });
+  });
+}
+
+
+/* 7. Pagina do carrinho (carrinho.html)*/
 function renderizarCarrinho() {
-  const carrinho = obterCarrinho();
   const lista = document.getElementById("carrinho-lista");
+  if (!lista) return; // só executa na página do carrinho
+
+  const carrinho = obterCarrinho();
   const btnFinalizar = document.getElementById("btn-finalizar");
 
+  atualizarContadorCarrinho();
   lista.innerHTML = "";
 
   if (carrinho.length === 0) {
@@ -85,10 +148,9 @@ function renderizarCarrinho() {
         <a href="cardapio.html" class="btn-continuar-grande">Ver Cardápio</a>
       </div>
     `;
-    btnFinalizar.classList.add("btn-desabilitado");
-    btnFinalizar.addEventListener("click", (e) => e.preventDefault());
+    if (btnFinalizar) btnFinalizar.classList.add("btn-desabilitado");
   } else {
-    btnFinalizar.classList.remove("btn-desabilitado");
+    if (btnFinalizar) btnFinalizar.classList.remove("btn-desabilitado");
 
     carrinho.forEach((item, index) => {
       const card = document.createElement("div");
@@ -111,22 +173,27 @@ function renderizarCarrinho() {
     });
   }
 
-  atualizarResumo(carrinho);
+  atualizarResumoCarrinho(carrinho);
 }
 
-function atualizarResumo(carrinho) {
+function atualizarResumoCarrinho(carrinho) {
+  const elSubtotal = document.getElementById("resumo-subtotal");
+  if (!elSubtotal) return;
+
   const subtotal = carrinho.reduce((soma, item) => soma + item.preco * item.quantidade, 0);
   const taxa = carrinho.length > 0 ? TAXA_ENTREGA : 0;
   const total = subtotal + taxa;
 
-  document.getElementById("resumo-subtotal").textContent = formatarMoeda(subtotal);
+  elSubtotal.textContent = formatarMoeda(subtotal);
   document.getElementById("resumo-taxa").textContent = formatarMoeda(taxa);
   document.getElementById("resumo-total").textContent = formatarMoeda(total);
 }
 
-// ações de delegação de evento do carrinho
-function configurarEventos() {
-  document.getElementById("carrinho-lista").addEventListener("click", (e) => {
+function iniciarEventosCarrinho() {
+  const lista = document.getElementById("carrinho-lista");
+  if (!lista) return;
+
+  lista.addEventListener("click", (e) => {
     const btn = e.target.closest("button");
     if (!btn) return;
 
@@ -134,10 +201,9 @@ function configurarEventos() {
     const index = parseInt(btn.dataset.index, 10);
 
     if (btn.classList.contains("qtd-btn")) {
-      const acao = btn.dataset.acao;
-      if (acao === "aumentar") {
+      if (btn.dataset.acao === "aumentar") {
         carrinho[index].quantidade += 1;
-      } else if (acao === "diminuir") {
+      } else {
         carrinho[index].quantidade -= 1;
         if (carrinho[index].quantidade <= 0) {
           carrinho.splice(index, 1);
@@ -155,49 +221,18 @@ function configurarEventos() {
   });
 }
 
-// inicialização
-document.addEventListener("DOMContentLoaded", () => {
-  inicializarCarrinhoSeVazio();
-  renderizarCarrinho();
-  configurarEventos();
-});
 
-// configurações do checkout
-const NUMERO_WHATSAPP = "5582996585635"; // número da lanchonete, formato: DDI + DDD + número
-const CHAVE_PIX = "82996585635"; // troque pela sua chave Pix real (CPF, telefone, e-mail ou chave aleatória)
-const TAXA_ENTREGA = 8.00;
-
-// carrinho (exemplo de fallback)
-// Se você já tiver um carrinho salvo no localStorage (de carrinho.html),
-// ele será usado automaticamente. Caso contrário, usa este exemplo.
-const carrinhoExemplo = [
-  { nome: "Hambúrguer Artesanal", quantidade: 1, preco: 25.00 },
-  { nome: "Refrigerante Lata", quantidade: 2, preco: 6.00 },
-  { nome: "Batata Frita", quantidade: 1, preco: 15.00 }
-];
-
-function obterCarrinho() {
-  try {
-    const salvo = localStorage.getItem("carrinhoMrLouiz");
-    if (salvo) {
-      const dados = JSON.parse(salvo);
-      if (Array.isArray(dados) && dados.length > 0) return dados;
-    }
-  } catch (e) {
-    console.warn("Não foi possível ler o carrinho salvo, usando exemplo.", e);
-  }
-  return carrinhoExemplo;
-}
-
-function formatarMoeda(valor) {
-  return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-
-//resumo do pedido
-function montarResumo() {
-  const carrinho = obterCarrinho();
+/*8. Pagina de checkout (checkout.html)*/
+function montarResumoCheckout() {
   const container = document.getElementById("resumo-itens");
+  if (!container) return null; // só executa na página de checkout
+
+  const carrinho = obterCarrinho();
   container.innerHTML = "";
+
+  if (carrinho.length === 0) {
+    container.innerHTML = `<p class="resumo-vazio">Seu carrinho está vazio.</p>`;
+  }
 
   let subtotal = 0;
 
@@ -214,64 +249,63 @@ function montarResumo() {
     container.appendChild(linha);
   });
 
-  const total = subtotal + TAXA_ENTREGA;
+  const taxa = carrinho.length > 0 ? TAXA_ENTREGA : 0;
+  const total = subtotal + taxa;
 
   document.getElementById("resumo-subtotal").textContent = formatarMoeda(subtotal);
-  document.getElementById("resumo-taxa").textContent = formatarMoeda(TAXA_ENTREGA);
+  document.getElementById("resumo-taxa").textContent = formatarMoeda(taxa);
   document.getElementById("resumo-total").textContent = formatarMoeda(total);
 
   return { carrinho, subtotal, total };
 }
 
-// validação do formulário
-function limparErros() {
+function limparErrosCheckout() {
   document.querySelectorAll(".erro-msg").forEach(el => el.textContent = "");
   document.querySelectorAll(".checkout-bloco input").forEach(el => el.classList.remove("input-erro"));
 }
 
-function mostrarErro(campoId, mensagem) {
+function mostrarErroCheckout(campoId, mensagem) {
   const erroEl = document.getElementById(`erro-${campoId}`);
   const inputEl = document.getElementById(campoId);
   if (erroEl) erroEl.textContent = mensagem;
   if (inputEl) inputEl.classList.add("input-erro");
 }
 
-function validarFormulario(dados) {
-  limparErros();
+function validarFormularioCheckout(dados) {
+  limparErrosCheckout();
   let valido = true;
 
   if (!dados.nome.trim()) {
-    mostrarErro("nome", "Por favor, digite seu nome.");
+    mostrarErroCheckout("nome", "Por favor, digite seu nome.");
     valido = false;
   }
 
   const telefoneNumeros = dados.telefone.replace(/\D/g, "");
   if (telefoneNumeros.length < 10) {
-    mostrarErro("telefone", "Digite um WhatsApp válido com DDD.");
+    mostrarErroCheckout("telefone", "Digite um WhatsApp válido com DDD.");
     valido = false;
   }
 
   if (!dados.rua.trim()) {
-    mostrarErro("rua", "Por favor, digite o nome da rua.");
+    mostrarErroCheckout("rua", "Por favor, digite o nome da rua.");
     valido = false;
   }
 
   if (!dados.numero.trim()) {
-    mostrarErro("numero", "Digite o número.");
+    mostrarErroCheckout("numero", "Digite o número.");
     valido = false;
   }
 
   if (!dados.bairro.trim()) {
-    mostrarErro("bairro", "Digite o bairro.");
+    mostrarErroCheckout("bairro", "Digite o bairro.");
     valido = false;
   }
 
   return valido;
 }
 
-// montar mensagem para WhatsApp
 function montarMensagemWhatsApp(dados, carrinho, subtotal, total) {
-  let mensagem = ` *Novo Pedido - Mr. Louiz*\n\n`;
+  let mensagem = `🍔 *Novo Pedido - Mr. Louiz*\n\n`;
 
   mensagem += `*Cliente:* ${dados.nome}\n`;
   mensagem += `*WhatsApp:* ${dados.telefone}\n\n`;
@@ -308,9 +342,10 @@ function montarMensagemWhatsApp(dados, carrinho, subtotal, total) {
   return mensagem;
 }
 
-//alternar formas de pagamento
-function configurarAlternanciaPagamento() {
+function iniciarAlternanciaPagamento() {
   const radioPix = document.getElementById("pagamento-pix");
+  if (!radioPix) return; // só executa na página de checkout
+
   const radioDinheiro = document.getElementById("pagamento-dinheiro");
   const blocoPix = document.getElementById("bloco-pix");
   const blocoDinheiro = document.getElementById("bloco-dinheiro");
@@ -327,12 +362,13 @@ function configurarAlternanciaPagamento() {
 
   radioPix.addEventListener("change", atualizarBlocos);
   radioDinheiro.addEventListener("change", atualizarBlocos);
-  atualizarBlocos(); // estado inicial
+  atualizarBlocos();
 }
 
-// copiar chave pix
-function configurarCopiarPix() {
+function iniciarCopiarPix() {
   const btnCopiar = document.getElementById("btn-copiar-pix");
+  if (!btnCopiar) return; // só executa na página de checkout
+
   const valorPix = document.getElementById("pix-chave-valor");
   const msgCopiado = document.getElementById("pix-copiado-msg");
 
@@ -343,20 +379,18 @@ function configurarCopiarPix() {
       await navigator.clipboard.writeText(CHAVE_PIX);
       msgCopiado.classList.add("visivel");
       setTimeout(() => msgCopiado.classList.remove("visivel"), 2000);
-    } catch (e) {
-      console.warn("Não foi possível copiar automaticamente:", e);
+    } catch (erro) {
+      console.warn("Não foi possível copiar automaticamente:", erro);
       alert(`Sua chave Pix é: ${CHAVE_PIX}`);
     }
   });
 }
 
-//inicialização do checkout
-document.addEventListener("DOMContentLoaded", () => {
-  const { carrinho, subtotal, total } = montarResumo();
-  configurarAlternanciaPagamento();
-  configurarCopiarPix();
-
+function iniciarFormularioCheckout() {
   const form = document.getElementById("form-checkout");
+  if (!form) return; // só executa na página de checkout
+
+  const resumo = montarResumoCheckout();
 
   form.addEventListener("submit", (e) => {
     e.preventDefault();
@@ -374,8 +408,7 @@ document.addEventListener("DOMContentLoaded", () => {
       troco: document.getElementById("troco") ? document.getElementById("troco").value : ""
     };
 
-    if (!validarFormulario(dados)) {
-      // rola a tela até o primeiro erro visível
+    if (!validarFormularioCheckout(dados)) {
       const primeiroErro = document.querySelector(".input-erro");
       if (primeiroErro) {
         primeiroErro.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -384,9 +417,25 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    const mensagem = montarMensagemWhatsApp(dados, carrinho, subtotal, total);
+    const mensagem = montarMensagemWhatsApp(dados, resumo.carrinho, resumo.subtotal, resumo.total);
     const url = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
 
     window.open(url, "_blank");
   });
+}
+
+
+/* 9. Inicialização geral
+   Cada função só "age" se os elementos da sua página existirem,
+   então é seguro rodar tudo isso em qualquer página do site. (por precaução chamando as funções) */
+document.addEventListener("DOMContentLoaded", () => {
+  iniciarCarrossel();
+  iniciarRastreamento();
+  atualizarContadorCarrinho();
+  iniciarBotoesAdicionar();
+  renderizarCarrinho();
+  iniciarEventosCarrinho();
+  iniciarAlternanciaPagamento();
+  iniciarCopiarPix();
+  iniciarFormularioCheckout();
 });

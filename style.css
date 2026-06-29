@@ -135,24 +135,18 @@ img.combo3:hover {
   transition: transform 0.3s ease; /* efeito suave */
 }
 
-
  img.combo {
   align-items: center;
-  width: 300px;
-  height: 320px;
-  border-radius: 30px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 320px;
+  height: auto; 
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   margin-right: 100px;
-  margin-left: 100px;
- 
-
 }
 
  img.combo2 {
   align-items: center;
   width: 320px;
   height: auto;
-  border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   margin-right: 100px;
 }
@@ -161,9 +155,11 @@ img.combo3 {
   align-items: center;
   width: 320px;
   height: auto;
-  border-radius: 30px;
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
 }
+
+
+
 
 /* footer */
 .footer {
@@ -294,6 +290,20 @@ h1 {
 h1:hover {
   color: #ff9900;
   transition: color 0.3s ease;
+}
+
+button.btn-adicionar {
+  display: block;
+  width: calc(100% - 32px);
+  margin: 12px auto 16px;
+  padding: 10px;
+  background: #e63946;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .cardapio-completo {
@@ -517,20 +527,7 @@ img.carrinho-imagem {
   75% { transform: rotate(4deg); }
 }
 
-
 /* Título "Resumo" dentro do aside */
-.checkout-resumo h3 {
-  background: #e63946;
-  text-align: center;
-  color: #fbff00;
-  margin-bottom: 20px;
-  margin-top: 1px;
-  padding: 15px;
-  border-radius: 10px;
-  font-size: 1.5rem;
-  font-weight: 600;
-  transition: all 0.6s ease;
-}
 
 .carrinho-grid {
   display: grid;
@@ -661,25 +658,26 @@ img.carrinho-imagem {
   display: block;
   text-align: center;
   margin-top: 12px;
-  color: #777;
+  color: #000000;
   text-decoration: none;
   font-size: 0.9rem;
   transition: color 0.2s ease;
 }
 
 .btn-continuar:hover {
-  color: #e63946;
+  color: #ff0015;
 }
 
 /* Resumo do pedido (compartilhado com checkout) */
 .checkout-resumo {
-  background: #fbff00;
+  background: #e63946;
   border-radius: 16px;
   padding: 24px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   position: sticky;
   top: 20px;
 }
+ 
 
 .resumo-item {
   display: flex;
