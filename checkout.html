@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout - Mr. Louiz</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="topo">
+    <img src="img/mr.louiz.jpg" alt="logo da lanchonete" class="logo">
+    <h1>Mr. Louiz, sua melhor opção em delivery</h1>
+  </header>
+
+    <h2>
+    <a href="menu.html"> Menu</a>
+    <a href="cardapio.html"> Cardápio</a>
+    <a href="carrinho.html"> Carrinho</a>
+    <a href="checkout.html"> Checkout</a>
+    <a href="rastreamento.html"> Entrega</a>
+    </h2>
+
+
+  <main class="checkout-container">
+
+    <h2 class="checkout-titulo">Finalizar Pedido</h2>
+
+    <form id="form-checkout" class="checkout-grid" novalidate>
+
+      <!-- COLUNA ESQUERDA: FORMULÁRIO -->
+      <div class="checkout-form">
+
+        <section class="checkout-bloco">
+          <h3>1. Seus dados</h3>
+
+          <label for="nome">Nome completo *</label>
+          <input type="text" id="nome" name="nome" placeholder="Digite seu nome" required>
+          <span class="erro-msg" id="erro-nome"></span>
+
+          <label for="telefone">WhatsApp *</label>
+          <input type="tel" id="telefone" name="telefone" placeholder="(82) 90000-0000" required>
+          <span class="erro-msg" id="erro-telefone"></span>
+
+          <label for="email">E-mail (opcional)</label>
+          <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com">
+        </section>
+
+        <section class="checkout-bloco">
+          <h3>2. Endereço de entrega</h3>
+
+          <label for="rua">Rua *</label>
+          <input type="text" id="rua" name="rua" placeholder="Nome da rua" required>
+          <span class="erro-msg" id="erro-rua"></span>
+
+          <div class="checkout-linha">
+            <div>
+              <label for="numero">Número *</label>
+              <input type="text" id="numero" name="numero" placeholder="123" required>
+              <span class="erro-msg" id="erro-numero"></span>
+            </div>
+            <div>
+              <label for="bairro">Bairro *</label>
+              <input type="text" id="bairro" name="bairro" placeholder="Centro" required>
+              <span class="erro-msg" id="erro-bairro"></span>
+            </div>
+          </div>
+
+          <label for="complemento">Complemento / Ponto de referência</label>
+          <input type="text" id="complemento" name="complemento" placeholder="Apto, casa, próximo a...">
+
+          <label for="obs">Observações do pedido</label>
+          <textarea id="obs" name="obs" placeholder="Ex: sem cebola, troco para R$ 50,00"></textarea>
+        </section>
+
+        <section class="checkout-bloco">
+          <h3>3. Forma de pagamento *</h3>
+          <div class="pagamento-opcoes">
+            <label class="pagamento-card">
+              <input type="radio" name="pagamento" value="Pix" id="pagamento-pix" checked>
+              <span>💠 Pix</span>
+            </label>
+            <label class="pagamento-card">
+              <input type="radio" name="pagamento" value="Dinheiro" id="pagamento-dinheiro">
+              <span>💵 Dinheiro</span>
+            </label>
+          </div>
+
+          <!-- Bloco da chave Pix: aparece só quando Pix está selecionado -->
+          <div id="bloco-pix" class="bloco-pagamento-info">
+            <p>Pague com a chave Pix abaixo e envie o comprovante pelo WhatsApp ao confirmar:</p>
+            <div class="pix-chave-box">
+              <span id="pix-chave-valor">82996585635</span>
+              <button type="button" id="btn-copiar-pix" class="btn-copiar">Copiar</button>
+            </div>
+            <span class="pix-copiado" id="pix-copiado-msg">Chave copiada!</span>
+          </div>
+
+          <!-- Bloco de troco: aparece só quando Dinheiro está selecionado -->
+          <div id="bloco-dinheiro" class="bloco-pagamento-info" style="display:none;">
+            <label for="troco">Precisa de troco para quanto?</label>
+            <input type="text" id="troco" name="troco" placeholder="Ex: R$ 50,00 (deixe em branco se não precisar)">
+          </div>
+        </section>
+
+      </div>
+
+      <!-- COLUNA DIREITA: RESUMO DO PEDIDO -->
+      <aside class="checkout-resumo">
+        <h3>Resumo do pedido</h3>
+
+        <div id="resumo-itens">
+          <!-- Itens inseridos dinamicamente via JS a partir do carrinho -->
+          <p class="resumo-vazio">Seu carrinho está vazio.</p>
+        </div>
+
+        <div class="resumo-linha"></div>
+
+        <div class="resumo-item">
+          <span>Subtotal</span>
+          <span id="resumo-subtotal">R$ 0,00</span>
+        </div>
+        <div class="resumo-item">
+          <span>Taxa de entrega</span>
+          <span id="resumo-taxa">R$ 5,00</span>
+        </div>
+
+        <div class="resumo-linha"></div>
+
+        <div class="resumo-total">
+          <span>Total</span>
+          <span id="resumo-total">R$ 0,00</span>
+        </div>
+
+        <button type="submit" class="btn-confirmar">Confirmar Pedido</button>
+        <p class="resumo-aviso">Você será direcionado ao WhatsApp para confirmar.</p>
+      </aside>
+
+    </form>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-baixo">
+      <p>&copy; 2026 Mr. Louiz - Seu delivery. Todos os direitos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="checkout.js"></script>
+</body>
+</html>
