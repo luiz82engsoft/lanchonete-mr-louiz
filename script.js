@@ -76,6 +76,53 @@ function atualizarContadorCarrinho() {
 }
 
 
+function alterarQtd(id, delta) {
+  const spanQtd = document.getElementById(`qtd-${id}`);
+  let qtd = parseInt(spanQtd.innerText);
+  
+  qtd = Math.max(0, qtd + delta); // Garante que nunca seja menor que 1
+  spanQtd.innerText = qtd;
+}
+
+function adicionarAoCarrinho(id, nome, preco) {
+  const qtd = parseInt(document.getElementById(`qtd-${id}`).innerText);
+  console.log(`Adicionando ${qtd}x ${nome} ao carrinho por R$ ${(preco * qtd).toFixed(2)}`);
+  // Aqui você chama sua função de carrinho existente
+}
+
+
+function iniciarEventosItemCardapio() {
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".item-cardapio").forEach(item => {
+      const btnMais = item.querySelector(".mais");
+      const btnMenos = item.querySelector(".menos");
+      const qtdValor = item.querySelector(".qtd-valor");
+      const btnAdicionar = item.querySelector(".btn-adicionar");
+
+      btnMais.addEventListener("click", () => {
+        qtdValor.textContent = parseInt(qtdValor.textContent) + 1;
+      });
+
+      btnMenos.addEventListener("click", () => {
+        let qtd = parseInt(qtdValor.textContent);
+        if (qtd > 1) qtdValor.textContent = qtd - 1;
+      });
+
+      btnAdicionar.addEventListener("click", () => {
+        const itemData = {
+          id: item.dataset.id,
+          nome: item.dataset.nome,
+          preco: parseFloat(item.dataset.preco),
+          imagem: item.dataset.imagem,
+          quantidade: parseInt(qtdValor.textContent)
+        };
+        adicionarAoCarrinho(itemData);
+        qtdValor.textContent = 1;
+      });
+    });
+  });
+}
+
 /* 6. Adicionar itens ao carrinho (cardápio, bebidas, combos)*/
 function adicionarAoCarrinho(item) {
   const carrinho = obterCarrinho();
@@ -344,47 +391,46 @@ function montarMensagemWhatsApp(dados, carrinho, subtotal, total) {
 
 function iniciarAlternanciaPagamento() {
   const radioPix = document.getElementById("pagamento-pix");
-  if (!radioPix) return; // só executa na página de checkout
-
-  const radioDinheiro = document.getElementById("pagamento-dinheiro");
+  const radioCartao = document.getElementById("pagamento-cartao");
   const blocoPix = document.getElementById("bloco-pix");
-  const blocoDinheiro = document.getElementById("bloco-dinheiro");
+  const blocoCartao = document.getElementById("bloco-cartao");
 
   function atualizarBlocos() {
     if (radioPix.checked) {
       blocoPix.style.display = "block";
-      blocoDinheiro.style.display = "none";
+      blocoCartao.style.display = "none";
+    } else if (radioCartao.checked) {
+      blocoCartao.style.display = "block";
+      blocoPix.style.display = "none";
     } else {
       blocoPix.style.display = "none";
-      blocoDinheiro.style.display = "block";
+      blocoCartao.style.display = "none";
     }
   }
 
-  radioPix.addEventListener("change", atualizarBlocos);
-  radioDinheiro.addEventListener("change", atualizarBlocos);
+  [radioPix, radioCartao].forEach(r => r.addEventListener("change", atualizarBlocos));
   atualizarBlocos();
 }
 
 function iniciarCopiarPix() {
-  const btnCopiar = document.getElementById("btn-copiar-pix");
-  if (!btnCopiar) return; // só executa na página de checkout
+  const btn = document.getElementById("btn-copiar-pix");
+  const msg = document.getElementById("pix-copiado-msg");
+  if (!btn) return;
 
-  const valorPix = document.getElementById("pix-chave-valor");
-  const msgCopiado = document.getElementById("pix-copiado-msg");
-
-  valorPix.textContent = CHAVE_PIX;
-
-  btnCopiar.addEventListener("click", async () => {
-    try {
-      await navigator.clipboard.writeText(CHAVE_PIX);
-      msgCopiado.classList.add("visivel");
-      setTimeout(() => msgCopiado.classList.remove("visivel"), 2000);
-    } catch (erro) {
-      console.warn("Não foi possível copiar automaticamente:", erro);
-      alert(`Sua chave Pix é: ${CHAVE_PIX}`);
-    }
+  btn.addEventListener("click", () => {
+    const chave = document.getElementById("pix-chave-valor").textContent;
+    navigator.clipboard.writeText(chave).then(() => {
+      msg.classList.add("visivel");
+      setTimeout(() => msg.classList.remove("visivel"), 2000);
+    });
   });
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  iniciarAlternanciaPagamento();
+  iniciarCopiarPix();
+});
+
 
 function iniciarFormularioCheckout() {
   const form = document.getElementById("form-checkout");
@@ -426,8 +472,8 @@ function iniciarFormularioCheckout() {
 
 
 /* 9. Inicialização geral
-   Cada função só "age" se os elementos da sua página existirem,
-   então é seguro rodar tudo isso em qualquer página do site. (por precaução chamando as funções) */
+  Necessito de lembrar de chamar as funções para poder rodar o código*/
+
 document.addEventListener("DOMContentLoaded", () => {
   iniciarCarrossel();
   iniciarRastreamento();

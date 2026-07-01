@@ -73,34 +73,47 @@
           <textarea id="obs" name="obs" placeholder="Ex: sem cebola, troco para R$ 50,00"></textarea>
         </section>
 
-        <section class="checkout-bloco">
-          <h3>3. Forma de pagamento *</h3>
-          <div class="pagamento-opcoes">
-            <label class="pagamento-card">
-              <input type="radio" name="pagamento" value="Pix" id="pagamento-pix" checked>
-              <span>💠 Pix</span>
-            </label>
-            <label class="pagamento-card">
-              <input type="radio" name="pagamento" value="Dinheiro" id="pagamento-dinheiro">
-              <span>💵 Dinheiro</span>
-            </label>
-          </div>
+<section class="checkout-bloco">
+  <h3>3. Forma de pagamento *</h3>
+  <div class="pagamento-opcoes">
+    <label class="pagamento-card">
+      <input type="radio" name="pagamento" value="Pix" id="pagamento-pix" checked>
+      <span> Pix</span>
+    </label>
+    <label class="pagamento-card">
+      <input type="radio" name="pagamento" value="Dinheiro" id="pagamento-dinheiro">
+      <span> Dinheiro</span>
+    </label>
+    <label class="pagamento-card">
+      <input type="radio" name="pagamento" value="cartao-debito" id="pagamento-cartao-debito">
+      <span> Cartão Débito / Crédito</span>
+  </div>
 
-          <!-- Bloco da chave Pix: aparece só quando Pix está selecionado -->
-          <div id="bloco-pix" class="bloco-pagamento-info">
-            <p>Pague com a chave Pix abaixo e envie o comprovante pelo WhatsApp ao confirmar:</p>
-            <div class="pix-chave-box">
-              <span id="pix-chave-valor">82996585635</span>
-              <button type="button" id="btn-copiar-pix" class="btn-copiar">Copiar</button>
-            </div>
-            <span class="pix-copiado" id="pix-copiado-msg">Chave copiada!</span>
-          </div>
+  <div class="pagamento-imagens">
+  <img src="img/pix.png" alt="Pix" class="pix-imagem">
+  <img src="img/dinheiro.jpeg" alt="Dinheiro" class="dinheiro-imagem">
+  <img src="img/bandeiras-de-cartao-de-credito-png" alt="Cartão de crédito" class="cartao-imagem">
+  <img src="img/siteseguro.png" alt="Sistema-de-Segurança" class="site-seguro-imagem">
 
-          <!-- Bloco de troco: aparece só quando Dinheiro está selecionado -->
-          <div id="bloco-dinheiro" class="bloco-pagamento-info" style="display:none;">
-            <label for="troco">Precisa de troco para quanto?</label>
-            <input type="text" id="troco" name="troco" placeholder="Ex: R$ 50,00 (deixe em branco se não precisar)">
-          </div>
+</div>
+
+  <!-- Bloco Pix -->
+  <div id="bloco-pix" class="bloco-pagamento-info">
+    <p>Pague com a chave Pix abaixo e envie o comprovante pelo WhatsApp ao confirmar:</p>
+    <div class="pix-chave-box">
+      <span id="pix-chave-valor">82996585635</span>
+      <button type="button" id="btn-copiar-pix" class="btn-copiar">Copiar</button>
+    </div>
+    <span class="pix-copiado" id="pix-copiado-msg">Chave copiada!</span>
+  </div>
+
+  <!-- Bloco Dinheiro -->
+  <div id="bloco-dinheiro" class="bloco-pagamento-info" style="display:none;">
+    <label for="troco">Precisa de troco para quanto?</label>
+    <input type="text" id="troco" name="troco" placeholder="Ex: R$ 50,00 (deixe em branco se não precisar)">
+  </div>
+</section>
+
         </section>
 
       </div>
@@ -141,9 +154,50 @@
   </main>
 
   <footer class="footer">
-    <div class="footer-baixo">
-      <p>&copy; 2026 Mr. Louiz - Seu delivery. Todos os direitos reservados.</p>
+   <div class="footer-conteudo">
+
+    <div class="footer-col footer-sobre">
+      <img src="img/mr.louiz.jpg" alt="logo da lanchonete" class="footer-logo">
+      <p>Mr. Louiz - Seu Delivery! Sabor de verdade, direto na sua casa.</p>
     </div>
+
+    <div class="footer-col">
+      <h4>Navegação</h4>
+      <ul>
+        <li><a href="menu.html">Menu</a></li>
+        <li><a href="cardapio.html">Cardápio</a></li>
+        <li><a href="carrinho.html">Carrinho</a></li>
+        <li><a href="checkout.html">Checkout</a></li>
+        <li><a href="rastreamento.html">Entrega</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Contato</h4>
+      <ul>
+        <li> Rua Cândido Alexandre Junqueiro - AL</li>
+        <li> (82) 99658-5635</li>
+        <li>Ter. a Dom: 18h às 23h</li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Redes Sociais</h4>
+      <div class="footer-social">
+        <a href="https://instagram.com/mr.louiz82" target="_blank" aria-label="Instagram">
+          <img src="img/instagram.jpeg" alt="Instagram">
+        </a>
+        <a href="https://wa.me/5582996585635" target="_blank" aria-label="WhatsApp">
+          <img src="img/whatsapp.jpeg" alt="WhatsApp">
+        </a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-baixo">
+    <p>&copy; 2026 Mr. Louiz - Seu delivery. Todos os direitos reservados.</p>
+  </div>
   </footer>
 
   <script src="checkout.js"></script>
