@@ -190,6 +190,18 @@ img.combo3 {
   font-weight: bold;
 }
 
+/* NOVO: aviso visual quando tentam adicionar com quantidade 0 */
+.qtd-alerta {
+  display: inline-block;
+  color: #d32f2f;
+  animation: piscarAlerta 0.6s ease;
+}
+
+@keyframes piscarAlerta {
+  0%, 100% { transform: scale(1); }
+  30% { transform: scale(1.4); color: #d32f2f; }
+}
+
 
 
 
@@ -343,6 +355,16 @@ button.btn-adicionar {
   text-align: center;
 }
 
+/* NOVO: layout de duas colunas no cardápio (itens + mini-carrinho) */
+.cardapio-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 20px;
+  align-items: start;
+  max-width: 1300px;
+  margin: 0 auto;
+}
+
 /* Ajuste no seu container pai */
 .grid-cardapio {
   display: grid;
@@ -373,6 +395,12 @@ button.btn-adicionar {
   box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   margin-right: 0;   
   display: block;
+}
+
+/* Mesmo efeito de hover que os combos do menu (scale suave) */
+.item-cardapio img:hover {
+  transform: scale(1.08);
+  transition: transform 0.3s ease;
 }
 
 /* 3. Ajuste os espaçamentos internos para não ocupar espaço desnecessário */
@@ -408,6 +436,114 @@ button.btn-adicionar {
   text-align: center;
   max-width: 1100px;
   margin: 10px auto 16px;
+}
+
+/* NOVO: mini-carrinho lateral (cardápio) */
+.mini-carrinho {
+  position: sticky;
+  top: 20px;
+  background: #fff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  margin-top: 40px;
+}
+
+.mini-carrinho h3 {
+  background: none;
+  color: #e63946;
+  text-align: left;
+  padding: 0;
+  margin: 0 0 14px;
+  font-size: 1.1rem;
+}
+
+#mini-carrinho-contagem {
+  background: #e63946;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px 9px;
+  font-size: 0.8rem;
+  margin-left: 6px;
+}
+
+.mini-carrinho-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.85rem;
+  color: #333;
+  padding: 6px 0;
+  border-bottom: 1px dashed #eee;
+}
+
+.mini-carrinho-item-nome {
+  overflow-wrap: anywhere;
+}
+
+.mini-carrinho-remover {
+  background: none;
+  border: none;
+  color: #d32f2f;
+  font-size: 0.9rem;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s ease;
+  padding: 0 2px;
+}
+
+.mini-carrinho-remover:hover {
+  opacity: 1;
+}
+
+/* Aviso explicativo quando o carrinho está vazio (dica sobre servidor local) */
+.aviso-servidor {
+  font-size: 0.8rem;
+  color: #888;
+  max-width: 420px;
+  margin: 0 auto 16px;
+  line-height: 1.4;
+}
+
+.aviso-servidor code {
+  background: #f0f0f0;
+  padding: 1px 5px;
+  border-radius: 4px;
+}
+
+.mini-carrinho-vazio {
+  color: #888;
+  font-size: 0.85rem;
+  font-style: italic;
+}
+
+.mini-carrinho-linha {
+  border-top: 1px solid #eee;
+  margin: 12px 0;
+}
+
+.mini-carrinho-total-linha {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  color: #1d1d1d;
+  margin-bottom: 14px;
+}
+
+.mini-carrinho-btn {
+  width: 100%;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .cardapio-layout {
+    grid-template-columns: 1fr;
+  }
+  .mini-carrinho {
+    position: static;
+  }
 }
 
 /* sobre nós */
@@ -797,6 +933,74 @@ img.carrinho-imagem {
   color: #e63946;
   margin-bottom: 30px;
   font-size: 1.8rem;
+}
+
+/* NOVO: indicador de etapas do checkout */
+.indicadores-etapas {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  max-width: 1100px;
+  margin: 0 auto 24px;
+  flex-wrap: wrap;
+}
+
+.indicador-etapa {
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: #eee;
+  color: #777;
+  font-size: 0.85rem;
+  font-weight: bold;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.indicador-etapa.indicador-ativo {
+  background: #e63946;
+  color: #fff;
+}
+
+.indicador-etapa.indicador-concluido {
+  background: #fbff00;
+  color: #1d1d1d;
+}
+
+/* NOVO: botões de navegação entre etapas */
+.etapa-botoes {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.btn-continuar-etapa,
+.btn-voltar-etapa {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.btn-continuar-etapa {
+  background: #e63946;
+  color: #fff;
+  margin-left: auto;
+  display: block;
+}
+
+.btn-continuar-etapa:hover {
+  background: #c92d3a;
+}
+
+.btn-voltar-etapa {
+  background: #eee;
+  color: #333;
+}
+
+.btn-voltar-etapa:hover {
+  background: #ddd;
 }
 
 .checkout-grid {

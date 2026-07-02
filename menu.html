@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>menu - Lanchonete Virtual</title>
   <link rel="stylesheet" href="style.css">
-  <script src="script.js"></script>
 </head>
 <body>
   <header>
@@ -76,8 +75,8 @@
 <h2>
   <a href="menu.html"> Menu</a>
   <a href="cardapio.html"> Cardápio</a>
-  <a href="carrinho.html"> Carrinho</a>
-  <a href="checkout.html"> Checkout</a>
+  <a href="carrinho.html"> Carrinho <span id="contador-carrinho" style="display:none; background:#fbff00; color:#e63946; border-radius:50%; padding:2px 7px; font-size:0.75rem; margin-left:4px;">0</span></a>
+  <a href="checkout.html"> Meus Pedidos</a>
   <a href="rastreamento.html"> Entrega</a>
 </h2>
 
@@ -109,11 +108,11 @@
       <p>Mr. Salada + Batata Frita + Refri.</p>
       <span class="preco">R$ 19.99</span>
       <div class="controle-qtd">
-        <button class="qtd-btn" onclick="alterarQtd('combo1', -1)">−</button>
+        <button class="qtd-btn" onclick="alterarQtd('combo1', -1)" type="button">−</button>
         <span id="qtd-combo1">0</span>
-        <button class="qtd-btn" onclick="alterarQtd('combo1', 1)">+</button>
+        <button class="qtd-btn" onclick="alterarQtd('combo1', 1)" type="button">+</button>
       </div>
-      <button class="btn-adicionar" onclick="adicionarAoCarrinho('combo1', 'Combo 1', 19.99)">Adicionar ao carrinho</button>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('combo1', 'Combo 1', 19.99, 'img/combo.jpg')">Adicionar ao carrinho</button>
     </div>
 
     <div class="item-cardapio">
@@ -122,11 +121,11 @@
       <p>2 Mr. Calabresa pelo preço de 1.</p>
       <span class="preco">R$ 30,00</span>
       <div class="controle-qtd">
-        <button class="qtd-btn" onclick="alterarQtd('combo2', -1)">−</button>
+        <button class="qtd-btn" onclick="alterarQtd('combo2', -1)" type="button">−</button>
         <span id="qtd-combo2">0</span>
-        <button class="qtd-btn" onclick="alterarQtd('combo2', 1)">+</button>
+        <button class="qtd-btn" onclick="alterarQtd('combo2', 1)" type="button">+</button>
       </div>
-      <button class="btn-adicionar" onclick="adicionarAoCarrinho('combo2', 'Combo 2', 30.00)">Adicionar ao carrinho</button>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('combo2', 'Combo 2', 30.00, 'img/combo2.jpg')">Adicionar ao carrinho</button>
     </div>
 
     <div class="item-cardapio">
@@ -135,11 +134,11 @@
       <p>Pizza Mr. Margherita G + Pizza Mr. Maltine P + Refrigerante 2L.</p>
       <span class="preco">R$ 72,00</span>
       <div class="controle-qtd">
-        <button class="qtd-btn" onclick="alterarQtd('combo3', -1)">−</button>
+        <button class="qtd-btn" onclick="alterarQtd('combo3', -1)" type="button">−</button>
         <span id="qtd-combo3">0</span>
-        <button class="qtd-btn" onclick="alterarQtd('combo3', 1)">+</button>
+        <button class="qtd-btn" onclick="alterarQtd('combo3', 1)" type="button">+</button>
       </div>
-      <button class="btn-adicionar" onclick="adicionarAoCarrinho('combo3', 'Combo 3', 72.00)">Adicionar ao carrinho</button>
+      <button class="btn-adicionar" onclick="adicionarAoCarrinho('combo3', 'Combo 3', 72.00, 'img/combo3.jpg')">Adicionar ao carrinho</button>
     </div>
 
   </div>
@@ -193,5 +192,6 @@
     <p>&copy; 2026 Mr. Louiz - Seu delivery. Todos os direitos reservados.</p>
   </div>
 </footer>
+<script src="script.js"></script>
 </body>
 </html>

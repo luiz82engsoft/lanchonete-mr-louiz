@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout - Mr. Louiz</title>
   <link rel="stylesheet" href="style.css">
+ 
 </head>
 <body>
 
@@ -16,8 +17,8 @@
     <h2>
     <a href="menu.html"> Menu</a>
     <a href="cardapio.html"> Cardápio</a>
-    <a href="carrinho.html"> Carrinho</a>
-    <a href="checkout.html"> Checkout</a>
+    <a href="carrinho.html"> Carrinho <span id="contador-carrinho" style="display:none; background:#fbff00; color:#e63946; border-radius:50%; padding:2px 7px; font-size:0.75rem; margin-left:4px;">0</span></a>
+    <a href="checkout.html"> Meus Pedidos</a>
     <a href="rastreamento.html"> Entrega</a>
     </h2>
 
@@ -26,12 +27,20 @@
 
     <h2 class="checkout-titulo">Finalizar Pedido</h2>
 
+    <!-- Indicador de progresso das etapas -->
+    <div class="indicadores-etapas">
+      <span class="indicador-etapa">1. Seus dados</span>
+      <span class="indicador-etapa">2. Endereço</span>
+      <span class="indicador-etapa">3. Pagamento</span>
+    </div>
+
     <form id="form-checkout" class="checkout-grid" novalidate>
 
-      <!-- COLUNA ESQUERDA: FORMULÁRIO -->
+      <!-- COLUNA ESQUERDA: FORMULÁRIO EM ETAPAS -->
       <div class="checkout-form">
 
-        <section class="checkout-bloco">
+        <!-- ETAPA 1 -->
+        <section class="checkout-bloco checkout-etapa">
           <h3>1. Seus dados</h3>
 
           <label for="nome">Nome completo *</label>
@@ -44,9 +53,12 @@
 
           <label for="email">E-mail (opcional)</label>
           <input type="email" id="email" name="email" placeholder="seuemail@exemplo.com">
+
+          <button type="button" class="btn-continuar-etapa">Continuar →</button>
         </section>
 
-        <section class="checkout-bloco">
+        <!-- ETAPA 2 -->
+        <section class="checkout-bloco checkout-etapa">
           <h3>2. Endereço de entrega</h3>
 
           <label for="rua">Rua *</label>
@@ -71,49 +83,57 @@
 
           <label for="obs">Observações do pedido</label>
           <textarea id="obs" name="obs" placeholder="Ex: sem cebola, troco para R$ 50,00"></textarea>
+
+          <div class="etapa-botoes">
+            <button type="button" class="btn-voltar-etapa">← Voltar</button>
+            <button type="button" class="btn-continuar-etapa">Continuar →</button>
+          </div>
         </section>
 
-<section class="checkout-bloco">
-  <h3>3. Forma de pagamento *</h3>
-  <div class="pagamento-opcoes">
-    <label class="pagamento-card">
-      <input type="radio" name="pagamento" value="Pix" id="pagamento-pix" checked>
-      <span> Pix</span>
-    </label>
-    <label class="pagamento-card">
-      <input type="radio" name="pagamento" value="Dinheiro" id="pagamento-dinheiro">
-      <span> Dinheiro</span>
-    </label>
-    <label class="pagamento-card">
-      <input type="radio" name="pagamento" value="cartao-debito" id="pagamento-cartao-debito">
-      <span> Cartão Débito / Crédito</span>
-  </div>
+        <!-- ETAPA 3 -->
+        <section class="checkout-bloco checkout-etapa">
+          <h3>3. Forma de pagamento *</h3>
+          <div class="pagamento-opcoes">
+            <label class="pagamento-card">
+              <input type="radio" name="pagamento" value="Pix" id="pagamento-pix" checked>
+              <span> Pix</span>
+            </label>
+            <label class="pagamento-card">
+              <input type="radio" name="pagamento" value="Dinheiro" id="pagamento-dinheiro">
+              <span> Dinheiro</span>
+            </label>
+            <label class="pagamento-card">
+              <input type="radio" name="pagamento" value="cartao-debito" id="pagamento-cartao-debito">
+              <span> Cartão Débito / Crédito</span>
+            </label>
+          </div>
 
-  <div class="pagamento-imagens">
-  <img src="img/pix.png" alt="Pix" class="pix-imagem">
-  <img src="img/dinheiro.jpeg" alt="Dinheiro" class="dinheiro-imagem">
-  <img src="img/bandeiras-de-cartao-de-credito-png" alt="Cartão de crédito" class="cartao-imagem">
-  <img src="img/siteseguro.png" alt="Sistema-de-Segurança" class="site-seguro-imagem">
+          <div class="pagamento-imagens">
+            <img src="img/pix.png" alt="Pix" class="pix-imagem">
+            <img src="img/dinheiro.jpeg" alt="Dinheiro" class="dinheiro-imagem">
+            <img src="img/bandeiras-de-cartao-de-credito-png" alt="Cartão de crédito" class="cartao-imagem">
+            <img src="img/siteseguro.png" alt="Sistema-de-Segurança" class="site-seguro-imagem">
+          </div>
 
-</div>
+          <!-- Bloco Pix -->
+          <div id="bloco-pix" class="bloco-pagamento-info">
+            <p>Pague com a chave Pix abaixo e envie o comprovante pelo WhatsApp ao confirmar:</p>
+            <div class="pix-chave-box">
+              <span id="pix-chave-valor">82996585635</span>
+              <button type="button" id="btn-copiar-pix" class="btn-copiar">Copiar</button>
+            </div>
+            <span class="pix-copiado" id="pix-copiado-msg">Chave copiada!</span>
+          </div>
 
-  <!-- Bloco Pix -->
-  <div id="bloco-pix" class="bloco-pagamento-info">
-    <p>Pague com a chave Pix abaixo e envie o comprovante pelo WhatsApp ao confirmar:</p>
-    <div class="pix-chave-box">
-      <span id="pix-chave-valor">82996585635</span>
-      <button type="button" id="btn-copiar-pix" class="btn-copiar">Copiar</button>
-    </div>
-    <span class="pix-copiado" id="pix-copiado-msg">Chave copiada!</span>
-  </div>
+          <!-- Bloco Dinheiro -->
+          <div id="bloco-dinheiro" class="bloco-pagamento-info" style="display:none;">
+            <label for="troco">Precisa de troco para quanto?</label>
+            <input type="text" id="troco" name="troco" placeholder="Ex: R$ 50,00 (deixe em branco se não precisar)">
+          </div>
 
-  <!-- Bloco Dinheiro -->
-  <div id="bloco-dinheiro" class="bloco-pagamento-info" style="display:none;">
-    <label for="troco">Precisa de troco para quanto?</label>
-    <input type="text" id="troco" name="troco" placeholder="Ex: R$ 50,00 (deixe em branco se não precisar)">
-  </div>
-</section>
-
+          <div class="etapa-botoes">
+            <button type="button" class="btn-voltar-etapa">← Voltar</button>
+          </div>
         </section>
 
       </div>
@@ -200,6 +220,6 @@
   </div>
   </footer>
 
-  <script src="checkout.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
