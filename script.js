@@ -49,7 +49,7 @@ function salvarCarrinho(c) {
     alert("Não foi possível salvar o carrinho neste navegador. Tente abrir o site em uma aba normal (não anônima) ou através de um servidor local, em vez de abrir o arquivo .html diretamente.");
     return;
   }
-  // Mantém o contador do cabeçalho e o mini-carrinho sempre sincronizados
+  // Mantém o contador do cabeçalho e o mini-carrinho sempre sincronizados, para não deixar o usuário confuso
   atualizarContador();
   renderizarMiniCarrinho();
 }
@@ -392,7 +392,7 @@ function iniciarFormularioCheckout() {
       troco: get("troco")
     };
 
-    let msg = `🍔 *Novo Pedido - Mr. Louiz*\n\n`;
+    let msg = ` *Novo Pedido - Mr. Louiz*\n\n`;
     msg += `*Cliente:* ${dados.nome}\n*WhatsApp:* ${dados.telefone}\n\n`;
     msg += `*Itens:*\n`;
     resumo.carrinho.forEach(i => msg += `• ${i.quantidade}x ${i.nome} — ${formatarMoeda(i.quantidade * i.preco)}\n`);
