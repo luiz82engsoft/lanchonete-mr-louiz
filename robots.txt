@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /index.html
+Allow: /cardapio.html
+Disallow: /carrinho.html
+Disallow: /checkout.html
+Disallow: /rastreamento.html
+
+Sitemap: https://lanchonete-mr-louiz-wq9d.vercel.app/sitemap.xml
