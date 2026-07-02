@@ -9,12 +9,34 @@ function formatarMoeda(v) {
   return (v || 0).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
+/* Remove itens inválidos/corrompidos (de bugs antigos: nome "undefined",
+   preço NaN/null, quantidade 0 ou inválida) e já salva o carrinho limpo. */
+function itemValido(i) {
+  return i &&
+    typeof i.id === "string" && i.id.trim() !== "" &&
+    typeof i.nome === "string" && i.nome.trim() !== "" &&
+    Number.isFinite(i.preco) && i.preco > 0 &&
+    Number.isFinite(i.quantidade) && i.quantidade > 0;
+}
+
 function obterCarrinho() {
+  let dados = [];
   try {
     const s = localStorage.getItem(CHAVE_CARRINHO);
-    if (s) { const d = JSON.parse(s); if (Array.isArray(d)) return d; }
+    if (s) {
+      const d = JSON.parse(s);
+      if (Array.isArray(d)) dados = d;
+    }
   } catch (e) {}
-  return [];
+
+  const limpo = dados.filter(itemValido);
+
+  // Se havia lixo (itens corrompidos de versões antigas), regrava o carrinho já limpo
+  if (limpo.length !== dados.length) {
+    try { localStorage.setItem(CHAVE_CARRINHO, JSON.stringify(limpo)); } catch (e) {}
+  }
+
+  return limpo;
 }
 
 function salvarCarrinho(c) {
@@ -57,12 +79,16 @@ function mostrarAvisoQtd(id) {
 
 function adicionarAoCarrinho(id, nome, preco, imagem) {
   const spanQtd = document.getElementById("qtd-" + id);
-  // CORRIGIDO: antes usava Math.max(1, ...) e sempre adicionava pelo menos 1,
-  // mesmo com o contador visível em 0. Agora, se estiver em 0, não adiciona nada.
   const qtd = spanQtd ? (parseInt(spanQtd.innerText, 10) || 0) : 1;
 
   if (qtd <= 0) {
     mostrarAvisoQtd(id);
+    return;
+  }
+
+  const precoNum = parseFloat(preco);
+  if (!id || !nome || !Number.isFinite(precoNum) || precoNum <= 0) {
+    console.error("Item inválido, não adicionado ao carrinho:", { id, nome, preco });
     return;
   }
 
@@ -72,7 +98,7 @@ function adicionarAoCarrinho(id, nome, preco, imagem) {
   if (existente) {
     existente.quantidade += qtd;
   } else {
-    carrinho.push({ id, nome, preco: parseFloat(preco) || 0, imagem: imagem || "", quantidade: qtd });
+    carrinho.push({ id, nome, preco: precoNum, imagem: imagem || "", quantidade: qtd });
   }
 
   salvarCarrinho(carrinho);
@@ -144,7 +170,6 @@ function renderizarCarrinho() {
   if (carrinho.length === 0) {
     lista.innerHTML = `<div class="carrinho-vazio">
       <p>Seu carrinho está vazio.</p>
-      <p class="aviso-servidor">Adicionou itens em outra página e eles não aparecem aqui? Isso costuma acontecer quando o site é aberto direto do arquivo (endereço começando com <code>file:///</code>). Abra o site por um servidor local (ex: extensão "Live Server" do VS Code) para o carrinho funcionar entre as páginas.</p>
       <a href="cardapio.html" class="btn-continuar-grande">Ver Cardápio</a>
     </div>`;
     if (btnFin) { btnFin.classList.add("btn-desabilitado"); }

@@ -397,16 +397,27 @@ button.btn-adicionar {
   display: block;
 }
 
-/* Mesmo efeito de hover que os combos do menu (scale suave) */
-.item-cardapio img:hover {
+/* Hover no cartão inteiro: imagem, título e preço reagem juntos (como era antes) */
+.item-cardapio:hover img {
   transform: scale(1.08);
   transition: transform 0.3s ease;
+}
+
+.item-cardapio:hover h4 {
+  color: #e63946;
+  transition: color 0.3s ease;
+}
+
+.item-cardapio:hover .preco {
+  color: #e63946;
+  transition: color 0.3s ease;
 }
 
 /* 3. Ajuste os espaçamentos internos para não ocupar espaço desnecessário */
 .item-cardapio h4 {
   margin: 5px 0;
   font-size: 1.1rem;
+  transition: color 0.3s ease;
 }
 
 .item-cardapio p {
@@ -428,6 +439,7 @@ button.btn-adicionar {
   font-weight: bold;
   font-size: 1.1rem;
   color: #1d1d1d;
+  transition: color 0.3s ease;
 }
 /* bebidas */
 
@@ -580,7 +592,6 @@ button.btn-adicionar {
   background: none;
   color: #e63946;
   text-align: left;
-  padding: 0;
   margin-bottom: 15px;
 }
 
@@ -1351,4 +1362,33 @@ img.carrinho-imagem {
   .checkout-resumo {
     position: static;
   }
+}
+
+/* Mini mapa de entrega (rastreamento.html) */
+.mapa-entrega {
+  max-width: 520px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 20px;
+  border: 2px solid #e63946;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.mapa-entrega h3 {
+  margin-top: 0;
+}
+
+.mapa-svg {
+  width: 100%;
+  height: auto;
+  background: #f2f2f2;
+  border-radius: 12px;
+}
+
+.mapa-legenda {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #555;
 }
