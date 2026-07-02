@@ -1392,3 +1392,186 @@ img.carrinho-imagem {
   font-size: 0.9rem;
   color: #555;
 }
+
+/* ======================================================================
+   RESPONSIVIDADE GERAL DO SITE - ajustes para telas de qualquer tamanho
+   ====================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Telas médias (tablets, notebooks pequenos) */
+@media (max-width: 1024px) {
+  .topo {
+    padding: 30px;
+  }
+
+  .topo iframe {
+    width: 100%;
+    max-width: 400px;
+    height: 220px;
+  }
+}
+
+/* Telas até 768px (tablets/celulares grandes) */
+@media (max-width: 768px) {
+  .topo {
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .topo iframe {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  #canvas {
+    position: static;
+    transform: none;
+    display: block;
+    width: 100%;
+    max-width: 500px;
+    height: auto;
+    margin: 20px auto;
+  }
+
+  h1 {
+    font-size: 1.9rem;
+  }
+
+  img.combo,
+  img.combo2,
+  img.combo3 {
+    width: 100%;
+    max-width: 280px;
+    height: auto;
+    margin-right: 0;
+  }
+
+  .checkout-linha {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .checkout-linha > div:first-child,
+  .checkout-linha > div:last-child {
+    flex: 1;
+  }
+
+  .pagamento-imagens {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-social {
+    margin-left: 0;
+    justify-content: center;
+  }
+}
+
+/* Telas até 600px (celulares) */
+@media (max-width: 600px) {
+  .logo {
+    width: 90px;
+    height: 90px;
+  }
+
+  h1 {
+    font-size: 1.6rem;
+  }
+
+  h3 {
+    font-size: 1.2rem;
+  }
+
+  .slides img {
+    width: 180px;
+    height: 140px;
+  }
+
+  .slides {
+    width: calc(180px * 8);
+  }
+
+  .grid-cardapio {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+  }
+
+  .item-cardapio {
+    max-width: 100%;
+  }
+
+  .carrinho-item {
+    grid-template-columns: 60px 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .carrinho-item-total {
+    text-align: left;
+  }
+
+  .checkout-bloco {
+    padding: 16px;
+  }
+
+  .pagamento-card {
+    min-width: 100px;
+  }
+
+  .pix-imagem,
+  .cartao-imagem,
+  .dinheiro-imagem {
+    width: 90px;
+  }
+
+  .site-seguro-imagem {
+    width: 60px;
+  }
+
+  .mapa-entrega {
+    padding: 12px;
+  }
+}
+
+/* Telas bem pequenas (celulares estreitos, menos de 400px) */
+@media (max-width: 400px) {
+  .topo {
+    padding: 12px;
+  }
+
+  h2 a {
+    margin: 6px 0;
+    font-size: 0.9rem;
+  }
+
+  .checkout-titulo {
+    font-size: 1.4rem;
+  }
+
+  .btn-adicionar {
+    font-size: 0.85rem;
+  }
+
+  .footer-social img {
+    width: 24px;
+    height: 24px;
+  }
+}
